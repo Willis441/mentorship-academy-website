@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Database Access</title>
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .badge-count {
+            background-color: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .back-link {
+            color: white;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-database"></i> Database Admin Dashboard</h1>
+                    <p class="mb-0">View all stored data from your Flask application</p>
+                </div>
+                <a href="{{ url_for('index') }}" class="back-link">
+                    <i class="bi bi-house"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Users</h5>
+                        <h2 class="text-primary">{{ users|length }}</h2>
+                        <p class="text-muted mb-0">Registered Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Contacts</h5>
+                        <h2 class="text-success">{{ contacts|length }}</h2>
+                        <p class="text-muted mb-0">Contact Messages</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Newsletters</h5>
+                        <h2 class="text-info">{{ newsletters|length }}</h2>
+                        <p class="text-muted mb-0">Subscribed Emails</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-people"></i> Registered Users 
+                    <span class="badge-count">{{ users|length }}</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if users %}
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.first_name }}</td>
+                                    <td>{{ user.last_name }}</td>
+                                    <td><strong>{{ user.username }}</strong></td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No users registered yet</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts Table -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="bi bi-envelope"></i> Contact Messages 
+                    <span class="badge-count">{{ contacts|length }}</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if contacts %}
+                                {% for contact in contacts %}
+                                <tr>
+                                    <td>{{ contact.id }}</td>
+                                    <td><strong>{{ contact.name }}</strong></td>
+                                    <td>{{ contact.email }}</td>
+                                    <td>{{ contact.subject }}</td>
+                                    <td>{{ contact.message[:50] }}{% if contact.message|length > 50 %}...{% endif %}</td>
+                                    <td>{{ contact.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No contact messages yet</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Subscribers Table -->
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="bi bi-mailbox"></i> Newsletter Subscribers 
+                    <span class="badge-count">{{ newsletters|length }}</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Subscribed At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if newsletters %}
+                                {% for newsletter in newsletters %}
+                                <tr>
+                                    <td>{{ newsletter.id }}</td>
+                                    <td><strong>{{ newsletter.email }}</strong></td>
+                                    <td>{{ newsletter.subscribed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No newsletter subscribers yet</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
