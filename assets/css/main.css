@@ -1336,6 +1336,7 @@ section,
   position: relative;
 }
 
+
 .testimonials .testimonial-item .testimonial-img {
   width: 90px;
   border-radius: 10px;
@@ -1343,6 +1344,8 @@ section,
   position: absolute;
   left: -45px;
 }
+
+
 
 .testimonials .testimonial-item h3 {
   font-size: 18px;
@@ -1881,9 +1884,3 @@ section,
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
-/*--------------------------------------------------------------
-# Starter Section Section
---------------------------------------------------------------*/
-.starter-section {
-  /* Add your styles here */
-}
